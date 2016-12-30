@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html ng-app='rutas'>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css">
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<script src="http://localhost:8080/socket.io/socket.io.js"></script>
+<script src="js/jquery-3.1.1.min.js" ></script>
+
+</head>
+<title>Turnos</title>
+<!--Iniciando el primer controlador inicioController-->
+<body ng-controller='inicioController'>
+<br><br><br><br><br><br><br><br><br>
+<div class="container">
+	<h1 style="text-align: center;">Turno Atendiendose</h1>
+	<div class="row">
+		<div class="col-md-6"><h2 style="text-align: center;">Turno: {{ turno }}</h2></div>
+		<div class="col-md-6"><h2 style="text-align: center;"> Caja: {{ caja }}</h2></div>
+	</div>
+</div>
+<div ng-view>
+<!-- Aquí inyectamos las vistas-->	
+</div>
+<script src="js/angular.min.js"></script>
+<script src="js/angular-route.min.js"></script>
+<script src="js/angular-resource.min.js"></script>
+<script src="js/main.js"></script>
+<script src="js/bootstrap.min.js"></script>
+</body>
+</html>

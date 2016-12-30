@@ -1,0 +1,12 @@
+.eliminar{
+	
+	float: left;
+	padding-right:  5px;
+}
+body
+{
+	background-image: url("../img/fondo.png");
+	background-repeat: no-repeat;
+	width: 1024px;
+	height: 600px;
+}
