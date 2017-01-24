@@ -1,7 +1,7 @@
 <br><br>
 <div class="container">
         <div class="row">
-            <div class="col-md-6 col-md-offset-3">
+            <div class="col-mx-6 col-md-offset-1">
                 <div class="panel panel-default">
                     <div class="panel-heading">Iniciar Sesión</div>
                     <div class="panel-body">
@@ -9,6 +9,19 @@
                             
                         </div>
                         <form>
+                            <div class="form-group">
+                                <label> Sucursal: </label><br>
+                                    <select name="singleSelect" ng-model="sucursal">
+                                        <option value="1">Módulo Central</option>
+                                        <option value="2">Módulo Centro</option>
+                                        <option value="3">Módulo Sahuaro</option>
+                                        <option value="4">Módulo Nor-Oriente</option>
+                                        <option value="5">Módulo Tanque Kino</option>
+                                        <option value="6">Módulo Xólotl</option>
+                                        <option value="7">Módulo Progreso</option>
+                                        <option value="8">Módulo Pabellón Reforma</option>
+                                    </select>
+                            </div>
                             <div class="form-group">
                                 <label>No. Caja</label>
                                 <input type="text" name="name" ng-model="caja" class="form-control">

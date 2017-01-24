@@ -1,17 +1,18 @@
 {
   "main": "system/index.html",
-  "name": "Agua de Hermosillo Usuario",
-  "description": "app Megacable nw.js",
+  "name": "Agua de Hermosillo usuarios",
+  "description": " pantalla de usuario nw.js",
   "version": "0.1.0",
   "keywords": [ "Agua", "node-webkit" ],
   "window": {
     "title": "Agua de Hermosillo",
+    "icon": "icon/logo_agua.png",
     "toolbar": false,
     "frame": true,
-    "width": 1024,
-    "height": 800,
-    "max_width": 1024,
-    "max_height": 800
+    "width": 800,
+    "height": 600,
+    "max_width": 1366,
+    "max_height": 768
     //"kiosk": true,
     //"fullscreen": true
   },
