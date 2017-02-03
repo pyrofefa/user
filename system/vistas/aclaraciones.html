@@ -2,17 +2,31 @@
 <div ng-repeat="data in datos">	
 	<div class="row" >
 		<div class="col-xs-6">
-			<h1 style="text-align: center;">{{ mostrar }}</h1>
-			<h1 style="text-align: center;">{{ data.turno }}</h1>
-			<h1 style="text-align: center;">{{ data.asunto }}</h1>
+			<div ng-if="data != null">
+				<h1 style="text-align: center;">{{ mostrar }}</h1>
+				<div ng-if="data.subasunto == 'Trámites'" >
+					<h1 style="text-align: center;">T{{ data.turno }}</h1>
+					<h1 style="text-align: center;">{{ data.asunto }}</h1>
+				</div>
+				<div ng-if="data.subasunto != 'Trámites'" >
+					<h1 style="text-align: center;">A{{ data.turno }}</h1>
+					<h1 style="text-align: center;">{{ data.asunto }}</h1>
+				</div>	
+			</div>
 			<div ng-if="data == null" >
 				<h1 style="text-align: center;">No hay numeros en espera</h1>
 			</div>
 		</div>
 		<div class="col-xs-6">
 			<h1 ng-if="data!=null">
-				<button class="btn btn-primary btn-lg" id="btn-comenzar" ng-disabled="tomar" ng-click="tomar_turno(data.id, data.turno, data.subasunto)">Tomar
+				<div ng-if="data.subasunto == 'Trámites'" >
+<button class="btn btn-primary btn-lg" id="btn-comenzar" ng-disabled="tomar" ng-click="tomar_turno(data.id, data.turno, data.subasunto, 'T')">Tomar
 				</button>
+				</div>
+				<div ng-if="data.subasunto != 'Trámites'" >
+<button class="btn btn-primary btn-lg" id="btn-comenzar" ng-disabled="tomar" ng-click="tomar_turno(data.id, data.turno, data.subasunto, 'A')">Tomar
+				</button>
+				</div>
 			</h1>
 			<h1>
 				<button class="btn btn-danger btn-lg"  ng-disabled="abandonado" ng-click="turno_abandonado(data.id, data.turno)">Abandonado</button>
@@ -25,5 +39,10 @@
 			</h1>
 		</div>
 	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<input type="hidden" name="tiempo" id="noc"  class="form-control">
+		</div>
+	</div>	
 </div>
 </div>

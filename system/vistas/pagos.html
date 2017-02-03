@@ -2,9 +2,11 @@
 <div ng-repeat="data in datos">	
 	<div class="row" >
 		<div class="col-xs-6">
-			<h1 style="text-align: center;">{{ mostrar }}</h1>
-			<h1 style="text-align: center;">{{ data.turno }}</h1>
-			<h1 style="text-align: center;">{{ data.asunto }}</h1>
+			<div ng-if="data != null">
+				<h1 style="text-align: center;">{{ mostrar }}</h1>
+				<h1 style="text-align: center;">P{{ data.turno }}</h1>
+				<h1 style="text-align: center;">{{ data.asunto }}</h1>
+			</div>
 			<div ng-if="data == null" >
 				<h1 style="text-align: center;">No hay numeros en espera</h1>
 			</div>

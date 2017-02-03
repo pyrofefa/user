@@ -75,7 +75,7 @@ rutas.controller('inicioController', function($scope, $http, $route, socket)
         console.log(sucursal);
         $http({
             method:"post",
-            url: "http://localhost/admin_agua/public/user/iniciar/"+sucursal,
+            url: "http://192.168.1.57:8080/turnomatic/public/user/iniciar/"+sucursal,
             data: ({'name' : caja , 'password' :  contra })
         }).success(function(data){
             //console.log(data);
@@ -107,7 +107,7 @@ rutas.controller('pagosController', function($scope, $http, $route, socket){
 
     $http({
         method:"get",
-        url: "http://localhost/admin_agua/public/home/mostrarpagos/"+localStorage.sucursal
+        url: "http://192.168.1.57:8080/turnomatic/public/home/mostrarpagos/"+localStorage.sucursal
         }).success(function(data){
             console.log(data.turno);
             $scope.datos=data;
@@ -118,9 +118,9 @@ rutas.controller('pagosController', function($scope, $http, $route, socket){
     $scope.tomar_turno=function($id, $turno, $subasunto)
     {
         //alert("haz hecho click  id:"+ $id+" turno: "+$turno);
+
         socket.emit('caja', localStorage.caja);
-        socket.emit('turno',$turno);
-        socket.emit('asunto',$subasunto);
+        socket.emit('turno',"P"+$turno);
         socket.emit('tipo','CAJA')
 
         $scope.tomar=true;
@@ -128,7 +128,7 @@ rutas.controller('pagosController', function($scope, $http, $route, socket){
 
         $http({
             method:"put",
-            url: "http://localhost/admin_agua/public/tikets/actualizar/"+$id,
+            url: "http://192.168.1.57:8080/turnomatic/public/tikets/actualizar/"+$id,
             data: ({ 'id_sucursal' : localStorage.sucursal, 'estado' : 1, 'fk_caja' : localStorage.caja})
         }).success(function(data){
             //console.log(data);
@@ -181,7 +181,7 @@ rutas.controller('pagosController', function($scope, $http, $route, socket){
 
         $http({
             method:"put",
-            url: "http://localhost/admin_agua/public/tikets/actualizar/"+$id,
+            url: "http://192.168.1.57:8080/turnomatic/public/tikets/actualizar/"+$id,
             data: ({ 'tiempo' : tiempo})
         }).success(function(data){
             //console.log(data);
@@ -201,7 +201,7 @@ rutas.controller('pagosController', function($scope, $http, $route, socket){
         
         $http({
             method:"put",
-            url: "http://localhost/admin_agua/public/tikets/actualizar/"+$id,
+            url: "http://192.168.1.57:8080/turnomatic/public/tikets/actualizar/"+$id,
             data: ({ 'estado' : 2, 'fk_caja' : localStorage.caja,'tiempo' : tiempo })
         }).success(function(data){
             //console.log(data);
@@ -226,7 +226,7 @@ rutas.controller('aclaracionesController', function($scope, $http, $route, socke
 
     $http({
         method:"get",
-        url: "http://localhost/admin_agua/public/home/mostraraclaraciones/"+localStorage.sucursal
+        url: "http://192.168.1.57:8080/turnomatic/public/home/mostraraclaraciones/"+localStorage.sucursal
         }).success(function(data){
             $scope.datos=data;
             console.log(data);
@@ -234,20 +234,21 @@ rutas.controller('aclaracionesController', function($scope, $http, $route, socke
             alert("Ha ocurrido un error al mostrar los datos");
     });
 
-    $scope.tomar_turno=function($id, $turno, $subasunto)
+    $scope.tomar_turno=function($id, $turno, $subasunto, $letra)
     {
         //alert("haz hecho click  id:"+ $id+" turno: "+$turno);
+        var numero = $letra+$turno;
+        //console.log(numero);
         socket.emit('caja', localStorage.caja);
-        socket.emit('turno',$turno);
-        socket.emit('asunto',$subasunto);
-        socket.emit('tipo','MODULO')
+        socket.emit('turno',numero);
+        socket.emit('tipo','VENTANILLA');
 
         $scope.tomar=true;
         $scope.volver = true;
 
         $http({
             method:"put",
-            url: "http://localhost/admin_agua/public/tikets/actualizar/"+$id,
+            url: "http://192.168.1.57:8080/turnomatic/public/tikets/actualizar/"+$id,
             data: ({ 'estado' : 1, 'fk_caja' : localStorage.caja})
         }).success(function(data){
             //console.log(data);
@@ -300,7 +301,7 @@ rutas.controller('aclaracionesController', function($scope, $http, $route, socke
 
         $http({
             method:"put",
-            url: "http://localhost/admin_agua/public/tikets/actualizar/"+$id,
+            url: "http://192.168.1.57:8080/turnomatic/public/tikets/actualizar/"+$id,
             data: ({ 'tiempo' : tiempo})
         }).success(function(data){
             //console.log(data);
@@ -320,7 +321,7 @@ rutas.controller('aclaracionesController', function($scope, $http, $route, socke
         
         $http({
             method:"put",
-            url: "http://localhost/admin_agua/public/tikets/actualizar/"+$id,
+            url: "http://192.168.1.57:8080/turnomatic/public/tikets/actualizar/"+$id,
             data: ({ 'estado' : 2, 'fk_caja' : localStorage.caja,'tiempo' : tiempo })
         }).success(function(data){
             //console.log(data);
