@@ -35,7 +35,7 @@ rutas.config(function($routeProvider) {
 
 //lamando a socket en angular
 rutas.factory('socket',['$rootScope', function($rootScope){
-    var socket = io.connect('http://192.168.2.133:8080');
+    var socket = io.connect('http://localhost:8080');
     return{
         on: function(eventName, callback){
             socket.on(eventName, callback);
@@ -75,7 +75,8 @@ rutas.controller('inicioController', function($scope, $http, $route, socket)
         console.log(sucursal);
         $http({
             method:"post",
-            url: "http://192.168.1.57:8080/turnomatic/public/user/iniciar/"+sucursal,
+            url: "http://localhost/turnomatic/public/user/iniciar/"+sucursal,
+            //url: "http://192.168.1.57:8080/turnomatic/public/user/iniciar/"+sucursal,
             data: ({'name' : caja , 'password' :  contra })
         }).success(function(data){
             //console.log(data);
@@ -107,7 +108,8 @@ rutas.controller('pagosController', function($scope, $http, $route, socket){
 
     $http({
         method:"get",
-        url: "http://192.168.1.57:8080/turnomatic/public/home/mostrarpagos/"+localStorage.sucursal
+        //url: "http://192.168.1.57:8080/turnomatic/public/home/mostrarpagos/"+localStorage.sucursal
+        url: "http://localhost/turnomatic/public/home/mostrarpagos/"+localStorage.sucursal
         }).success(function(data){
             console.log(data.turno);
             $scope.datos=data;
@@ -128,7 +130,8 @@ rutas.controller('pagosController', function($scope, $http, $route, socket){
 
         $http({
             method:"put",
-            url: "http://192.168.1.57:8080/turnomatic/public/tikets/actualizar/"+$id,
+            //url: "http://192.168.1.57:8080/turnomatic/public/tikets/actualizar/"+$id,
+            url: "http://localhost/turnomatic/public/tikets/actualizar/"+$id,
             data: ({ 'id_sucursal' : localStorage.sucursal, 'estado' : 1, 'fk_caja' : localStorage.caja})
         }).success(function(data){
             //console.log(data);
@@ -181,7 +184,8 @@ rutas.controller('pagosController', function($scope, $http, $route, socket){
 
         $http({
             method:"put",
-            url: "http://192.168.1.57:8080/turnomatic/public/tikets/actualizar/"+$id,
+            //url: "http://192.168.1.57:8080/turnomatic/public/tikets/actualizar/"+$id,
+            url: "http://localhost/turnomatic/public/tikets/actualizar/"+$id,
             data: ({ 'tiempo' : tiempo})
         }).success(function(data){
             //console.log(data);
@@ -201,7 +205,8 @@ rutas.controller('pagosController', function($scope, $http, $route, socket){
         
         $http({
             method:"put",
-            url: "http://192.168.1.57:8080/turnomatic/public/tikets/actualizar/"+$id,
+            //url: "http://192.168.1.57:8080/turnomatic/public/tikets/actualizar/"+$id,
+            url: "http://localhost/turnomatic/public/tikets/actualizar/"+$id,
             data: ({ 'estado' : 2, 'fk_caja' : localStorage.caja,'tiempo' : tiempo })
         }).success(function(data){
             //console.log(data);
@@ -226,7 +231,8 @@ rutas.controller('aclaracionesController', function($scope, $http, $route, socke
 
     $http({
         method:"get",
-        url: "http://192.168.1.57:8080/turnomatic/public/home/mostraraclaraciones/"+localStorage.sucursal
+        //url: "http://192.168.1.57:8080/turnomatic/public/home/mostraraclaraciones/"+localStorage.sucursal
+        url: "http://localhost/turnomatic/public/home/mostraraclaraciones/"+localStorage.sucursal
         }).success(function(data){
             $scope.datos=data;
             console.log(data);
@@ -248,7 +254,8 @@ rutas.controller('aclaracionesController', function($scope, $http, $route, socke
 
         $http({
             method:"put",
-            url: "http://192.168.1.57:8080/turnomatic/public/tikets/actualizar/"+$id,
+            //url: "http://192.168.1.57:8080/turnomatic/public/tikets/actualizar/"+$id,
+            url: "http://localhost/turnomatic/public/tikets/actualizar/"+$id,
             data: ({ 'estado' : 1, 'fk_caja' : localStorage.caja})
         }).success(function(data){
             //console.log(data);
@@ -301,7 +308,8 @@ rutas.controller('aclaracionesController', function($scope, $http, $route, socke
 
         $http({
             method:"put",
-            url: "http://192.168.1.57:8080/turnomatic/public/tikets/actualizar/"+$id,
+            //url: "http://192.168.1.57:8080/turnomatic/public/tikets/actualizar/"+$id,
+            url: "http://localhost/turnomatic/public/tikets/actualizar/"+$id,
             data: ({ 'tiempo' : tiempo})
         }).success(function(data){
             //console.log(data);
@@ -321,7 +329,8 @@ rutas.controller('aclaracionesController', function($scope, $http, $route, socke
         
         $http({
             method:"put",
-            url: "http://192.168.1.57:8080/turnomatic/public/tikets/actualizar/"+$id,
+            //url: "http://192.168.1.57:8080/turnomatic/public/tikets/actualizar/"+$id,
+            url: "http://localhost/turnomatic/public/tikets/actualizar/"+$id,
             data: ({ 'estado' : 2, 'fk_caja' : localStorage.caja,'tiempo' : tiempo })
         }).success(function(data){
             //console.log(data);
@@ -337,6 +346,4 @@ rutas.controller('aclaracionesController', function($scope, $http, $route, socke
     {
         window.location.href = "#/seleccionar";
     }
-
-
 });
