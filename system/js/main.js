@@ -2,6 +2,8 @@
 var hora;
 var minuto;
 var segundos;
+var noActivity = 0;
+var flag = false;
 
 // Creación del módulo
 var rutas = angular.module('rutas', ['ngRoute','ngResource']);
@@ -105,26 +107,27 @@ rutas.controller('pagosController', function($scope, $http, $route, socket){
     $scope.abandonado = true;
     $scope.terminar = true;
     $scope.mostrar = "Turno en espera"
-
+    
     $http({
         method:"get",
         //url: "http://localhost/turnomatic/public/home/mostrarpagos/"+localStorage.sucursal
         url: "http://localhost/turnomatic/public/api/mostrarpagos/"+localStorage.sucursal
         }).success(function(data){
             console.log(data.turno);
+            $('#cargando').hide();
             $scope.datos=data;
         }).error(function(data){
-            alert("Ha ocurrido un error al mostrar los datos");
+            //alert("Ha ocurrido un error al mostrar los datos");
+            $route.reload();
     });
 
     $scope.tomar_turno=function($id, $turno, $subasunto)
     {
         //alert("haz hecho click  id:"+ $id+" turno: "+$turno);
-
+        $('#cargando').show();
         socket.emit('caja', localStorage.caja);
         socket.emit('turno',"P"+$turno);
         socket.emit('tipo','CAJA')
-
         $scope.tomar=true;
         $scope.volver=true;
 
@@ -139,20 +142,21 @@ rutas.controller('pagosController', function($scope, $http, $route, socket){
             $scope.abandonado = false;
             $scope.terminar = false;
             $scope.mostrar = "Atendiendo"
+            flag = false;
+            $('#cargando').hide();
             //$route.reload();
         }).error(function(data){
             //console.log(data);
-            alert("Ha ocurrido un error al actualizar los datos");
-            //$route.reload();
+            //alert("Ha ocurrido un error al actualizar los datos");
+            $('#cargando').show();
+            $route.reload();
             //console.log(id);
         })
-
-         var tiempo = {
+        var tiempo = {
             hora: 0,
             minuto: 0,
             segundo: 0
         };
-
         var tiempo_corriendo = null;
         tiempo_corriendo = setInterval(function()
         {
@@ -178,10 +182,11 @@ rutas.controller('pagosController', function($scope, $http, $route, socket){
     }
     $scope.terminar_turno = function($id, $turno)
     {
+        
+        $('#cargando').show();
         //alert("Terminado");
         var tiempo = $("#noc").val();
         console.log(tiempo);
-
         $http({
             method:"put",
             //url: "http://localhost/turnomatic/public/tikets/actualizar/"+$id,
@@ -189,16 +194,20 @@ rutas.controller('pagosController', function($scope, $http, $route, socket){
             data: ({ 'tiempo' : tiempo})
         }).success(function(data){
             //console.log(data);
+            $('#cargando').hide();
             $route.reload();
+            flag = true;
         }).error(function(data){
             //console.log(data);
-            alert("Ha ocurrido un error al actualizar los datos");
-            //$route.reload();
+            //alert("Ha ocurrido un error al actualizar los datos");
+            $('#cargando').show();
+            $route.reload();
             //console.log(id);
         })
     }
     $scope.turno_abandonado = function($id, $turno)
     {
+        $('#cargando').show();
         //alert("Abandonado");
         var tiempo = $("#noc").val();
         console.log(tiempo);
@@ -210,10 +219,11 @@ rutas.controller('pagosController', function($scope, $http, $route, socket){
             data: ({ 'estado' : 2, 'fk_caja' : localStorage.caja,'tiempo' : tiempo })
         }).success(function(data){
             //console.log(data);
+            $('#cargando').hide();
             $route.reload();
         }).error(function(data){
             //console.log(data);
-            alert("Ha ocurrido un error al actualizar los datos");
+            $('#cargando').show();
             $route.reload();
             //console.log(id);
         })
@@ -235,6 +245,7 @@ rutas.controller('aclaracionesController', function($scope, $http, $route, socke
         url: "http://localhost/turnomatic/public/api/mostraraclaraciones/"+localStorage.sucursal
         }).success(function(data){
             $scope.datos=data;
+            $('#cargando').hide();
             console.log(data);
         }).error(function(data){
             alert("Ha ocurrido un error al mostrar los datos");
@@ -242,6 +253,7 @@ rutas.controller('aclaracionesController', function($scope, $http, $route, socke
     $scope.tomar_turno=function($id, $turno, $subasunto, $letra)
     {
         //alert("haz hecho click  id:"+ $id+" turno: "+$turno);
+        $('#cargando').show();
         var numero = $letra+$turno;
         //console.log(numero);
         socket.emit('caja', localStorage.caja);
@@ -262,20 +274,20 @@ rutas.controller('aclaracionesController', function($scope, $http, $route, socke
             $scope.abandonado = false;
             $scope.terminar = false;
             $scope.mostrar = "Atendiendo"
+            $('#cargando').hide();
             //$route.reload();
         }).error(function(data){
             //console.log(data);
-            alert("Ha ocurrido un error al actualizar los datos");
-            //$route.reload();
+            //alert("Ha ocurrido un error al actualizar los datos");
+            $('#cargando').show();
+            $route.reload();
             //console.log(id);
         })
-
-         var tiempo = {
+        var tiempo = {
             hora: 0,
             minuto: 0,
             segundo: 0
         };
-
         var tiempo_corriendo = null;
         tiempo_corriendo = setInterval(function()
         {
@@ -301,6 +313,7 @@ rutas.controller('aclaracionesController', function($scope, $http, $route, socke
     }
     $scope.terminar_turno = function($id, $turno)
     {
+        $('#cargando').show();
         //alert("Terminado");
         var tiempo = $("#noc").val();
        //console.log (tiempo);
@@ -312,20 +325,24 @@ rutas.controller('aclaracionesController', function($scope, $http, $route, socke
             data: ({ 'tiempo' : tiempo})
         }).success(function(data){
             //console.log(data);
+            $('#cargando').hide();
             $route.reload();
         }).error(function(data){
             //console.log(data);
-            alert("Ha ocurrido un error al actualizar los datos");
-            //$route.reload();
+            //alert("Ha ocurrido un error al actualizar los datos");
+            $('#cargando').show();
+            $route.reload();
             //console.log(id);
         })
+        //var idleInterval = setInterval(timerIncrement, 1000); // 1 segundo
+
     }
     $scope.turno_abandonado = function($id, $turno)
     {
         //alert("Abandonado");
+        $('#cargando').show();
         var tiempo = $("#noc").val();
         //console.log(tiempo);
-        
         $http({
             method:"put",
             //url: "http://localhost/turnomatic/public/tikets/actualizar/"+$id,
@@ -333,16 +350,37 @@ rutas.controller('aclaracionesController', function($scope, $http, $route, socke
             data: ({ 'estado' : 2, 'fk_caja' : localStorage.caja,'tiempo' : tiempo })
         }).success(function(data){
             //console.log(data);
+            $('#cargando').hide();
             $route.reload();
         }).error(function(data){
             //console.log(data);
-            alert("Ha ocurrido un error al actualizar los datos");
+            //alert("Ha ocurrido un error al actualizar los datos");
+            $('#cargando').show();
             $route.reload();
             //console.log(id);
         })
+        //var idleInterval = setInterval(timerIncrement, 1000); // 1 segundo
     }
     $scope.volver_atras = function()
     {
         window.location.href = "#/seleccionar";
     }
 });
+/*function timerIncrement() 
+{
+    $(this).mousemove(function (e) {
+        noActivity = 0;
+    });
+    $(this).keypress(function (e) {
+        noActivity = 0;
+    });
+  noActivity = noActivity + 1;
+  //console.log(flag);
+  console.log("noActivity: "+noActivity);
+  
+    if (noActivity > 300)
+    {
+      noActivity = 0; 
+      window.location = '#/seleccionar';
+    }
+}*/
