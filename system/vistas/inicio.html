@@ -8,6 +8,10 @@
                         <div align="middle">
                             
                         </div>
+                        <p class="alert alert-danger" id="error" hidden>No. caja y/o contraseña no validos</p>
+                        <p class="alert alert-warning" id="error_servidor" hidden>
+                            Ah ocurrido un error al conectarse con servidor intente de nuevo
+                        </p>
                         <form>
                             <div class="form-group">
                                 <label> Sucursal: </label><br>
@@ -38,4 +42,13 @@
                 </div>
             </div>
         </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="progress" id="cargando" hidden>
+            <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+              Conectando con servidor
+            </div>
+        </div>      
     </div>
+</div>

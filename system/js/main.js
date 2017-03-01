@@ -47,6 +47,8 @@ rutas.factory('socket',['$rootScope', function($rootScope){
 //controlador 
 rutas.controller('inicioController', function($scope, $http, $route, socket) 
 {
+    $scope.tipo="Ventanilla";
+
     socket.on('turno',function(data){
         console.log(data);
         $scope.$apply(function(){
@@ -59,15 +61,15 @@ rutas.controller('inicioController', function($scope, $http, $route, socket)
             $scope.caja = data;
         });
     })
-    socket.on('asunto',function(data){
+    socket.on('tipo',function(data){
         console.log(data);
         $scope.$apply(function(){
-            $scope.asunto = data;
+            $scope.tipo = data;
         });
     })
-
     $scope.iniciar_sesion = function()
     {
+        $('#cargando').show();
         var caja=$scope.caja;
         var contra=$scope.password;
         var sucursal=$scope.sucursal;
@@ -79,6 +81,7 @@ rutas.controller('inicioController', function($scope, $http, $route, socket)
             data: ({'name' : caja , 'password' :  contra })
         }).success(function(data){
             //console.log(data);
+            $("#cargando").hide();
             if(data==1)
             {
                 window.location.href="#/seleccionar";
@@ -91,9 +94,12 @@ rutas.controller('inicioController', function($scope, $http, $route, socket)
             else if(data==0)
             {
                 console.log("error");
+                $("#error").show();
             }
         }).error(function(data){
-            alert("Ha ocurrido un error al Iniciar Sesion");
+            //alert("Ha ocurrido un error al Iniciar Sesion");
+            $("#error_servidor").show();
+            $("#cargando").hide();
             //console.log(data);
         })
     }
