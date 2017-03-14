@@ -256,7 +256,7 @@ rutas.controller('aclaracionesController', function($scope, $http, $route, socke
             $('#cargando').hide();
             console.log(data);
         }).error(function(data){
-            alert("Ha ocurrido un error al mostrar los datos");
+            //alert("Ha ocurrido un error al mostrar los datos");
     });
     $scope.tomar_turno=function($id, $turno, $subasunto, $letra)
     {
