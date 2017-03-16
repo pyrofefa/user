@@ -2,6 +2,8 @@
 var hora;
 var minuto;
 var segundos;
+var tiempo_corriendo = null;
+
 // Creación del módulo
 var rutas = angular.module('rutas', ['ngRoute','ngResource']);
 // Configuración de las rutas
@@ -159,7 +161,6 @@ rutas.controller('pagosController', function($scope, $http, $route, socket, $tim
             minuto: 0,
             segundo: 0
         };
-        var tiempo_corriendo = null;
         tiempo_corriendo = setInterval(function()
         {
             // Segundos
@@ -181,6 +182,7 @@ rutas.controller('pagosController', function($scope, $http, $route, socket, $tim
             $("#noc").val(hora + ":" + minuto + ":"+ segundos);
 
         }, 1000);
+
     }
     $scope.terminar_turno = function($id, $turno)
     {
@@ -195,13 +197,12 @@ rutas.controller('pagosController', function($scope, $http, $route, socket, $tim
             url: "http://localhost/turnomatic/public/api/tikets/actualizar/"+$id,
             data: ({ 'tiempo' : tiempo})
         }).success(function(data){
-            //console.log(data);
+            clearInterval(tiempo_corriendo);
             $('#cargando').hide();
             $route.reload();
             flag = true;
         }).error(function(data){
-            //console.log(data);
-            //alert("Ha ocurrido un error al actualizar los datos");
+            clearInterval(tiempo_corriendo);
             $('#cargando').show();
             $route.reload();
             //console.log(id);
@@ -223,14 +224,13 @@ rutas.controller('pagosController', function($scope, $http, $route, socket, $tim
             url: "http://localhost/turnomatic/public/api/tikets/actualizar/"+$id,
             data: ({ 'estado' : 2, 'fk_caja' : localStorage.caja,'tiempo' : tiempo })
         }).success(function(data){
-            //console.log(data);
+            clearInterval(tiempo_corriendo);
             $('#cargando').hide();
             $route.reload();
         }).error(function(data){
-            //console.log(data);
+            clearInterval(tiempo_corriendo);
             $('#cargando').show();
             $route.reload();
-            //console.log(id);
         })
         $timeout(function() {
             window.location.href="#/seleccionar";
@@ -296,7 +296,7 @@ rutas.controller('aclaracionesController', function($scope, $http, $route, socke
             minuto: 0,
             segundo: 0
         };
-        var tiempo_corriendo = null;
+        tiempo_corriendo = null;
         tiempo_corriendo = setInterval(function()
         {
             // Segundos
@@ -324,7 +324,7 @@ rutas.controller('aclaracionesController', function($scope, $http, $route, socke
         $('#cargando').show();
         //alert("Terminado");
         var tiempo = $("#noc").val();
-       //console.log (tiempo);
+        //console.log (tiempo);
         $http({
             method:"put",
             //url: "http://localhost/turnomatic/public/tikets/actualizar/"+$id,
@@ -333,10 +333,10 @@ rutas.controller('aclaracionesController', function($scope, $http, $route, socke
         }).success(function(data){
             //console.log(data);
             $('#cargando').hide();
+            clearInterval(tiempo_corriendo);
             $route.reload();
         }).error(function(data){
-            //console.log(data);
-            //alert("Ha ocurrido un error al actualizar los datos");
+            clearInterval(tiempo_corriendo);
             $('#cargando').show();
             $route.reload();
             //console.log(id);
@@ -358,11 +358,11 @@ rutas.controller('aclaracionesController', function($scope, $http, $route, socke
             data: ({ 'estado' : 2, 'fk_caja' : localStorage.caja,'tiempo' : tiempo })
         }).success(function(data){
             //console.log(data);
+            clearInterval(tiempo_corriendo);
             $('#cargando').hide();
             $route.reload();
         }).error(function(data){
-            //console.log(data);
-            //alert("Ha ocurrido un error al actualizar los datos");
+            clearInterval(tiempo_corriendo);
             $('#cargando').show();
             $route.reload();
             //console.log(id);
