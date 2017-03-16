@@ -4,6 +4,10 @@ var minuto;
 var segundos;
 var tiempo_corriendo = null;
 
+var noActivity = 0;
+var flag = false;
+var idleInterval;
+
 // Creación del módulo
 var rutas = angular.module('rutas', ['ngRoute','ngResource']);
 // Configuración de las rutas
@@ -52,19 +56,19 @@ rutas.controller('inicioController', function($scope, $http, $route, socket)
     $scope.tipo="Ventanilla";
 
     socket.on('turno',function(data){
-        console.log(data);
+        //console.log(data);
         $scope.$apply(function(){
             $scope.turno = data;
         });
     })
     socket.on('caja',function(data){
-        console.log(data);
+       // console.log(data);
         $scope.$apply(function(){
             $scope.caja = data;
         });
     })
     socket.on('tipo',function(data){
-        console.log(data);
+        //console.log(data);
         $scope.$apply(function(){
             $scope.tipo = data;
         });
@@ -75,7 +79,7 @@ rutas.controller('inicioController', function($scope, $http, $route, socket)
         var caja=$scope.caja;
         var contra=$scope.password;
         var sucursal=$scope.sucursal;
-        console.log(sucursal);
+        //console.log(sucursal);
         $http({
             method:"post",
             url: "http://localhost/turnomatic/public/api/iniciar/"+sucursal,
@@ -95,7 +99,7 @@ rutas.controller('inicioController', function($scope, $http, $route, socket)
             }
             else if(data==0)
             {
-                console.log("error");
+                //console.log("error");
                 $("#error").show();
             }
         }).error(function(data){
@@ -118,7 +122,7 @@ rutas.controller('pagosController', function($scope, $http, $route, socket, $tim
         //url: "http://localhost/turnomatic/public/home/mostrarpagos/"+localStorage.sucursal
         url: "http://localhost/turnomatic/public/api/mostrarpagos/"+localStorage.sucursal
         }).success(function(data){
-            console.log(data.turno);
+            //console.log(data.turno);
             $('#cargando').hide();
             $scope.datos=data;
         }).error(function(data){
@@ -127,6 +131,8 @@ rutas.controller('pagosController', function($scope, $http, $route, socket, $tim
     });
     $scope.tomar_turno=function($id, $turno, $subasunto)
     {
+        clearInterval(idleInterval);
+        noActivity = 0;
         //alert("haz hecho click  id:"+ $id+" turno: "+$turno);
         $('#cargando').show();
         socket.emit('caja', localStorage.caja);
@@ -134,7 +140,7 @@ rutas.controller('pagosController', function($scope, $http, $route, socket, $tim
         socket.emit('tipo','CAJA')
         $scope.tomar=true;
         $scope.volver=true;
-
+        
         $http({
             method:"put",
             //url: "http://localhost/turnomatic/public/tikets/actualizar/"+$id,
@@ -207,10 +213,8 @@ rutas.controller('pagosController', function($scope, $http, $route, socket, $tim
             $route.reload();
             //console.log(id);
         })
-        
-        $timeout(function() {
-            window.location.href="#/seleccionar";
-        },300000);
+
+        idleInterval = setInterval(timerIncrement, 1000); // 1 segundo
     }
     $scope.turno_abandonado = function($id, $turno)
     {
@@ -232,13 +236,13 @@ rutas.controller('pagosController', function($scope, $http, $route, socket, $tim
             $('#cargando').show();
             $route.reload();
         })
-        $timeout(function() {
-            window.location.href="#/seleccionar";
-        },300000);
+        idleInterval = setInterval(timerIncrement, 1000); // 1 segundo
     }
     $scope.volver_atras = function()
     {
         window.location.href = "#/seleccionar";
+        clearInterval(idleInterval);
+        noActivity = 0;
     }
 });
 rutas.controller('aclaracionesController', function($scope, $http, $route, socket){
@@ -246,7 +250,7 @@ rutas.controller('aclaracionesController', function($scope, $http, $route, socke
     $scope.abandonado = true;
     $scope.terminar = true;
     $scope.mostrar = "Turno en espera"
-
+    
     $http({
         method:"get",
         //url: "http://localhost/turnomatic/public/home/mostraraclaraciones/"+localStorage.sucursal
@@ -254,12 +258,14 @@ rutas.controller('aclaracionesController', function($scope, $http, $route, socke
         }).success(function(data){
             $scope.datos=data;
             $('#cargando').hide();
-            console.log(data);
+            //console.log(data);
         }).error(function(data){
             //alert("Ha ocurrido un error al mostrar los datos");
     });
     $scope.tomar_turno=function($id, $turno, $subasunto, $letra)
     {
+        clearInterval(idleInterval);
+        noActivity = 0;
         //alert("haz hecho click  id:"+ $id+" turno: "+$turno);
         $('#cargando').show();
         var numero = $letra+$turno;
@@ -341,9 +347,8 @@ rutas.controller('aclaracionesController', function($scope, $http, $route, socke
             $route.reload();
             //console.log(id);
         })
-        $timeout(function() {
-            window.location.href="#/seleccionar";
-        },300000);
+        idleInterval = setInterval(timerIncrement, 1000); // 1 segundo
+        //Zero the idle timer on mouse movement.
     }
     $scope.turno_abandonado = function($id, $turno)
     {
@@ -367,12 +372,26 @@ rutas.controller('aclaracionesController', function($scope, $http, $route, socke
             $route.reload();
             //console.log(id);
         })
-        $timeout(function() {
-            window.location.href="#/seleccionar";
-        },300000);
+        idleInterval = setInterval(timerIncrement, 1000); // 1 segundo
     }
     $scope.volver_atras = function()
     {
         window.location.href = "#/seleccionar";
+        clearInterval(idleInterval);
+        noActivity = 0;
     }
 });
+
+function timerIncrement() 
+{
+
+  noActivity = noActivity + 1;
+  //console.log(flag);
+  //console.log("noActivity: "+noActivity);
+  
+    if (noActivity > 300)
+    {
+      noActivity = 0; 
+      window.location = '#/seleccionar';
+    }
+}
