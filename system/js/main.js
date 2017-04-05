@@ -4,6 +4,8 @@ var minuto;
 var segundos;
 var tiempo_corriendo = null;
 
+
+
 var noActivity = 0;
 var flag = false;
 var idleInterval;
@@ -116,7 +118,7 @@ rutas.controller('pagosController', function($scope, $http, $route, socket, $tim
     $scope.abandonado = true;
     $scope.terminar = true;
     $scope.mostrar = "Turno en espera"
-    
+   
     $http({
         method:"get",
         //url: "http://localhost/turnomatic/public/home/mostrarpagos/"+localStorage.sucursal
@@ -131,6 +133,13 @@ rutas.controller('pagosController', function($scope, $http, $route, socket, $tim
     });
     $scope.tomar_turno=function($id, $turno, $subasunto)
     {
+        var datetimeNow = new Date();
+        var hourNow = datetimeNow.getHours();
+        var minuteNow = datetimeNow.getMinutes();
+        var secondsNow = datetimeNow.getSeconds();
+        var atendido = hourNow+':'+minuteNow+':'+secondsNow;
+        //console.log(atendido);
+        
         clearInterval(idleInterval);
         noActivity = 0;
         //alert("haz hecho click  id:"+ $id+" turno: "+$turno);
@@ -145,7 +154,7 @@ rutas.controller('pagosController', function($scope, $http, $route, socket, $tim
             method:"put",
             //url: "http://localhost/turnomatic/public/tikets/actualizar/"+$id,
             url: "http://localhost/turnomatic/public/api/tikets/actualizar/"+$id,
-            data: ({ 'id_sucursal' : localStorage.sucursal, 'estado' : 1, 'fk_caja' : localStorage.caja})
+            data: ({ 'id_sucursal' : localStorage.sucursal, 'estado' : 1, 'fk_caja' : localStorage.caja, 'atendido' : atendido })
         }).success(function(data){
             //console.log(data);
             $scope.tomar = true;
@@ -250,7 +259,7 @@ rutas.controller('aclaracionesController', function($scope, $http, $route, socke
     $scope.abandonado = true;
     $scope.terminar = true;
     $scope.mostrar = "Turno en espera"
-    
+   
     $http({
         method:"get",
         //url: "http://localhost/turnomatic/public/home/mostraraclaraciones/"+localStorage.sucursal
@@ -264,7 +273,16 @@ rutas.controller('aclaracionesController', function($scope, $http, $route, socke
     });
     $scope.tomar_turno=function($id, $turno, $subasunto, $letra)
     {
+
+        var datetimeNow = new Date();
+        var hourNow = datetimeNow.getHours();
+        var minuteNow = datetimeNow.getMinutes();
+        var secondsNow = datetimeNow.getSeconds();
+        var atendido = hourNow+':'+minuteNow+':'+secondsNow;
+        //console.log(atendido);
+        
         clearInterval(idleInterval);
+
         noActivity = 0;
         //alert("haz hecho click  id:"+ $id+" turno: "+$turno);
         $('#cargando').show();
@@ -281,7 +299,7 @@ rutas.controller('aclaracionesController', function($scope, $http, $route, socke
             method:"put",
             //url: "http://localhost/turnomatic/public/tikets/actualizar/"+$id,
             url: "http://localhost/turnomatic/public/api/tikets/actualizar/"+$id,
-            data: ({ 'estado' : 1, 'fk_caja' : localStorage.caja})
+            data: ({ 'estado' : 1, 'fk_caja' : localStorage.caja, 'atendido' : atendido })
         }).success(function(data){
             //console.log(data);
             $scope.tomar = true;
@@ -389,9 +407,10 @@ function timerIncrement()
   //console.log(flag);
   //console.log("noActivity: "+noActivity);
   
-    if (noActivity > 300)
+    if (noActivity > 130)
     {
-      noActivity = 0; 
-      window.location = '#/seleccionar';
+        noActivity = 0;
+        clearInterval(idleInterval);
+        window.location = '#/seleccionar';
     }
 }
