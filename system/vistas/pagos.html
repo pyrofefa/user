@@ -5,7 +5,16 @@
 			<div ng-if="data != null">
 				<h1 style="text-align: center;">{{ mostrar }}</h1>
 				<h1 style="text-align: center;">P{{ data.turno }}</h1>
-				<h1 style="text-align: center;">{{ data.asunto }}</h1>
+				<br>
+				<h3 style="text-align: center;">
+ 					<select>
+	   					<option style="text-align: center;">{{data.asunto}}</option>
+	   					<option>Pago</option>
+	   					<option>Pago de convenio</option>
+	   					<option>Pago carta no adeudo</option>
+					</select>
+				</h3>
+				
 			</div>
 			<div ng-if="data == null" >
 				<h1 style="text-align: center;">No hay numeros en espera</h1>
@@ -29,7 +38,7 @@
 	</div>
 	<div class="row">
 		<div class="col-md-12">
-			<input type="hidden" name="tiempo" id="noc"  class="form-control">
+			<input type="text" name="tiempo" id="noc"  class="form-control" readonly="true" disabled>
 		</div>
 	</div>	
 </div>
@@ -43,3 +52,4 @@
 	</div>
 </div>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>

@@ -6,8 +6,36 @@
 			<div ng-if="data != null">
 				<h1 style="text-align: center;">{{ mostrar }}</h1>
 					<h1 style="text-align: center;">A{{ data.turno }}</h1>
-					<h1 style="text-align: center;">{{ data.asunto }}</h1>
-			</div>
+					<h1 style="text-align: center;">{{ data.subasunto }}</h1>
+ 					<div ng-if="data.subasunto == 'Tramites'">
+						<h4 style="text-align: center;">
+							<select id="asunto" disabled>
+								<option value="{{data.asunto}}" selected>{{data.asunto}}</option>
+								<option value="Contrato">Contrato</option>
+								<option value="Convenio">Convenio</option>
+								<option value="Cambio de nombre">Cambio de nombre</option>
+								<option value="Carta de adeudo">Carta de no adeudo</option>
+								<option value="Factibilidad">Factibilidad de servicio</option>
+								<option value="2 o mas tramites">2 o mas tramites</option>
+							</select>
+						</h4>
+					</div>
+					<div ng-if="data.subasunto == 'Aclaraciones y Otros'">
+						<h4 style="text-align: center;">
+							<select id="asunto" disabled>
+								<option value="{{data.asunto}}" selected>{{data.asunto}}</option>
+								<option value="Alto consumo (con y sin medidor)">Alto consumo (con y sin medidor)</option>
+								<option value="Reconexion de servicio">Reconexion de servicio</option>
+								<option value="Error en lectura">Error en lectura</option>
+								<option value="No toma lectura">No toma lectura</option>
+								<option value="No entrega de recibo">No entrega recibo</option>
+								<option value="Cambio de tarifa">Cambio de tarifa</option>
+								<option value="Solicitud de medidor">Solicitud de medidor</option>
+								<option value="Otros tramites">Otros Tramites</option>
+							</select>
+						</h4>
+					</div>
+				</div>
 			<div ng-if="data == null" >
 				<h1 style="text-align: center;">No hay numeros en espera</h1>
 			</div>
@@ -29,9 +57,11 @@
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-md-12">
-			<input type="hidden" name="tiempo" id="noc"  class="form-control">
+		<div class="col-md-4">
+			<input type="text" name="tiempo" id="noc"  class="form-control" readonly="true" disabled>
 		</div>
+		<div class="col-md-4"></div>
+		<div class="col-md-4"></div>
 	</div>	
 </div>
 <div class="container">
@@ -45,3 +75,4 @@
 </div>
 </div>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
