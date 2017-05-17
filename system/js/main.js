@@ -3,12 +3,9 @@ var hora;
 var minuto;
 var segundos;
 var tiempo_corriendo = null;
-
-
-
 var noActivity = 0;
 var flag = false;
-var idleInterval;
+var idleInterval = null;
 
 // Creación del módulo
 var rutas = angular.module('rutas', ['ngRoute','ngResource']);
@@ -43,7 +40,7 @@ rutas.config(function($routeProvider) {
 
 //lamando a socket en angular
 rutas.factory('socket',['$rootScope', function($rootScope){
-    var socket = io.connect('http://192.168.2.133:8080');
+    var socket = io.connect('http://localhost:8080');
     return{
         on: function(eventName, callback){
             socket.on(eventName, callback);
@@ -135,7 +132,7 @@ rutas.controller('pagosController', function($scope, $http, $route, socket, $tim
     $scope.tomar_turno=function($id, $turno, $subasunto)
     {
        
-        //console.log(atendido);
+        $('#asunto').removeAttr('disabled');
         clearInterval(idleInterval);
         noActivity = 0;
         //alert("haz hecho click  id:"+ $id+" turno: "+$turno);
@@ -145,9 +142,7 @@ rutas.controller('pagosController', function($scope, $http, $route, socket, $tim
         socket.emit('tipo','CAJA')
         $scope.tomar=true;
         $scope.volver=true;
-        var prueba = $('#s').val();
 
-        console.log('prueba'+prueba);
         $http({
             method:"put",
             //url: "http://localhost/turnomatic/public/tikets/actualizar/"+$id,
@@ -199,7 +194,8 @@ rutas.controller('pagosController', function($scope, $http, $route, socket, $tim
     }
     $scope.terminar_turno = function($id, $turno)
     {
-        
+        var asunto = $('#asunto').val();
+        console.log(asunto);
         $('#cargando').show();
         //alert("Terminado");
         var tiempo = $("#noc").val();
@@ -208,7 +204,7 @@ rutas.controller('pagosController', function($scope, $http, $route, socket, $tim
             method:"put",
             //url: "http://localhost/turnomatic/public/tikets/actualizar/"+$id,
             url: "http://localhost/turnomatic/public/api/tikets/actualizartiempo/"+$id,
-            data: ({ 'estado' : 1, 'tiempo' : tiempo})
+            data: ({ 'estado' : 1, 'tiempo' : tiempo, 'asunto' : asunto })
         }).success(function(data){
             clearInterval(tiempo_corriendo);
             $('#cargando').hide();
@@ -225,6 +221,8 @@ rutas.controller('pagosController', function($scope, $http, $route, socket, $tim
     }
     $scope.turno_abandonado = function($id, $turno)
     {
+        var asunto = $('#asunto').val();
+        console.log(asunto);
         $('#cargando').show();
         //alert("Abandonado");
         var tiempo = $("#noc").val();
@@ -233,7 +231,7 @@ rutas.controller('pagosController', function($scope, $http, $route, socket, $tim
             method:"put",
             //url: "http://localhost/turnomatic/public/tikets/actualizar/"+$id,
             url: "http://localhost/turnomatic/public/api/tikets/actualizartiempo/"+$id,
-            data: ({ 'estado' : 2, 'tiempo' : tiempo })
+            data: ({ 'estado' : 2, 'tiempo' : tiempo, 'asunto' : asunto })
         }).success(function(data){
             clearInterval(tiempo_corriendo);
             $('#cargando').hide();
@@ -274,6 +272,7 @@ rutas.controller('aclaracionesController', function($scope, $http, $route, socke
         
  
         $('#asunto').removeAttr('disabled');
+        clearInterval(idleInterval);
         noActivity = 0;
         //alert("haz hecho click  id:"+ $id+" turno: "+$turno);
         $('#cargando').show();
@@ -342,6 +341,7 @@ rutas.controller('aclaracionesController', function($scope, $http, $route, socke
         //alert("Terminado");
         var tiempo = $("#noc").val();
         //console.log (tiempo);
+        console.log(asunto);
         $http({
             method:"put",
             //url: "http://localhost/turnomatic/public/tikets/actualizar/"+$id,
@@ -363,6 +363,8 @@ rutas.controller('aclaracionesController', function($scope, $http, $route, socke
     }
     $scope.turno_abandonado = function($id, $turno)
     {
+        var asunto = $('#asunto').val();
+        console.log(asunto);
         //alert("Abandonado");
         $('#cargando').show();
         var tiempo = $("#noc").val();
@@ -371,7 +373,7 @@ rutas.controller('aclaracionesController', function($scope, $http, $route, socke
             method:"put",
             //url: "http://localhost/turnomatic/public/tikets/actualizar/"+$id,
             url: "http://localhost/turnomatic/public/api/tikets/actualizartiempo/"+$id,
-            data: ({ 'estado' : 2, 'tiempo' : tiempo })
+            data: ({ 'estado' : 2, 'tiempo' : tiempo,'asunto': asunto })
         }).success(function(data){
             //console.log(data);
             clearInterval(tiempo_corriendo);
@@ -389,29 +391,29 @@ rutas.controller('aclaracionesController', function($scope, $http, $route, socke
     {
         window.location.href = "#/seleccionar";
         clearInterval(idleInterval);
+        clearInterval(tiempo_corriendo);
         noActivity = 0;
     }
 
 });
 rutas.controller('seleccionarController', function($scope, $http, $route, socket) 
 {
-            clearInterval(idleInterval);
-
+    clearInterval(idleInterval);
+    clearInterval(tiempo_corriendo);
+    noActivity = 0;
 });
-
-
-
 function timerIncrement() 
 {
 
   noActivity = noActivity + 1;
   //console.log(flag);
-  //console.log("noActivity: "+noActivity);
+  console.log("noActivity: "+noActivity);
   
-    if (noActivity > 130)
+    if (noActivity > 30)
     {
-        noActivity = 0;
+        //noActivity = 0;
         clearInterval(idleInterval);
+        clearInterval(tiempo_corriendo);
         window.location = '#/seleccionar';
     }
 }
