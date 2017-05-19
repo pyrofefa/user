@@ -138,8 +138,8 @@ rutas.controller('pagosController', function($scope, $http, $route, socket, $tim
         //alert("haz hecho click  id:"+ $id+" turno: "+$turno);
         $('#cargando').show();
         socket.emit('caja', localStorage.caja);
-        socket.emit('turno',"P"+$turno);
-        socket.emit('tipo','CAJA')
+        socket.emit('turno_pago',"P"+$turno);
+        //socket.emit('tipo','CAJA')
         $scope.tomar=true;
         $scope.volver=true;
 
@@ -278,9 +278,9 @@ rutas.controller('aclaracionesController', function($scope, $http, $route, socke
         $('#cargando').show();
         var numero = $letra+$turno;
         //console.log(numero);
-        socket.emit('caja', localStorage.caja);
+        socket.emit('ventanilla', localStorage.caja);
         socket.emit('turno',numero);
-        socket.emit('tipo','VENTANILLA');
+        //socket.emit('tipo','VENTANILLA');
 
         $scope.tomar=true;
         $scope.volver = true;
