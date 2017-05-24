@@ -216,8 +216,13 @@ rutas.controller('pagosController', function($scope, $http, $route, socket, $tim
             $route.reload();
             //console.log(id);
         })
+        flag = true;
+        
+        if (flag == true) 
+        {
+            idleInterval = setInterval(timerIncrement, 1000); // 1 segundo
+        }    
 
-        idleInterval = setInterval(timerIncrement, 1000); // 1 segundo
     }
     $scope.turno_abandonado = function($id, $turno)
     {
@@ -241,7 +246,12 @@ rutas.controller('pagosController', function($scope, $http, $route, socket, $tim
             $('#cargando').show();
             $route.reload();
         })
-        idleInterval = setInterval(timerIncrement, 1000); // 1 segundo
+        flag = true;
+        
+        if (flag == true) 
+        {
+            idleInterval = setInterval(timerIncrement, 1000); // 1 segundo
+        }    
     }
     $scope.volver_atras = function()
     {
@@ -358,7 +368,13 @@ rutas.controller('aclaracionesController', function($scope, $http, $route, socke
             $route.reload();
             //console.log(id);
         })
-        idleInterval = setInterval(timerIncrement, 1000); // 1 segundo
+        
+        flag = true;
+        
+        if (flag == true) 
+        {
+            idleInterval = setInterval(timerIncrement, 1000); // 1 segundo
+        }
         //Zero the idle timer on mouse movement.
     }
     $scope.turno_abandonado = function($id, $turno)
@@ -385,7 +401,13 @@ rutas.controller('aclaracionesController', function($scope, $http, $route, socke
             $route.reload();
             //console.log(id);
         })
-        idleInterval = setInterval(timerIncrement, 1000); // 1 segundo
+        flag = true;
+        console.log(flag);
+        
+        if (flag == true) 
+        {
+            idleInterval = setInterval(timerIncrement, 1000); // 1 segundo
+        }
     }
     $scope.volver_atras = function()
     {
@@ -401,19 +423,22 @@ rutas.controller('seleccionarController', function($scope, $http, $route, socket
     clearInterval(idleInterval);
     clearInterval(tiempo_corriendo);
     noActivity = 0;
+    flag = false;
+    console.log(flag);
+
 });
 function timerIncrement() 
 {
 
   noActivity = noActivity + 1;
-  //console.log(flag);
+  console.log(flag);
   console.log("noActivity: "+noActivity);
   
-    if (noActivity > 30)
-    {
+   if (noActivity > 120)
+   {
         //noActivity = 0;
         clearInterval(idleInterval);
         clearInterval(tiempo_corriendo);
         window.location = '#/seleccionar';
-    }
+    }    
 }
