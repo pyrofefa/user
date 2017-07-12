@@ -6,7 +6,8 @@
 <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css">
 <link rel="stylesheet" type="text/css" href="css/style.css">
 <link rel="stylesheet" type="text/css" href="css/bootstrap-select.min.css">
- <script src="http://localhost:8080/socket.io/socket.io.js"></script>
+<script src="http://192.168.100.122:8080/socket.io/socket.io.js"></script>
+<!--<script src="http://192.168.100.49:8080/socket.io/socket.io.js"></script>-->
 <!--<script src="http://192.168.2.133:8080/socket.io/socket.io.js"></script>-->
 <script src="js/jquery-3.1.1.min.js" ></script>
 </head>
@@ -17,9 +18,9 @@
 <div class="container">
 	<div class="row">
 		<div class="col-xs-3">
-			<h3 style="color: #DF7401;">
-				 Ventanilla: <span id="caja"></span>
-			</h3>
+			<h4 style="color: #DF7401;">
+				 {{tipo}}: <span id="caja"></span>
+			</h4>
 		</div>
 		<div class="col-xs-6">
 			<h1 style="text-align: center;">En Pantalla</h1>	
@@ -27,7 +28,7 @@
 	</div>
 	<div class="row">
 		<div class="col-xs-6">
-			<h2 style="text-align: center;">Turno: {{ turno }}</h2>
+			<h2 style="text-align: center;">TURNO: {{ turno }}</h2>
 			<!--<h2 style="text-align: center;">Asunto: {{ asunto }} </h2>-->
 		</div>
 		<div class="col-xs-6"><h2 style="text-align: center;"> {{tipo}} : {{ caja }}</h2></div>
@@ -44,6 +45,5 @@
 <script src="js/bootstrap.min.js"></script>
 <!--<script src="js/cronometro.js"></script>-->
 <!--<script src="js/time.js"></script>-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
 </body>
 </html>
