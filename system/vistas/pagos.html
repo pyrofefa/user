@@ -5,14 +5,17 @@
 			<div ng-if="data != null">
 				<h1 style="text-align: center;">{{ mostrar }}</h1>
 				<h1 style="text-align: center;">P{{ data.turno }}</h1>
-				<h3 style="text-align: center;">
- 					<select id="asunto" disabled>
-	   					<option value="{{data.asunto}}" selected>{{data.asunto}}</option>
-	   					<option value="Pago">Pago</option>
+				<h1 style="text-align: center;">{{ data.subasunto }}</h1>
+				<h4 style="text-align: center;">
+					<select id="asunto" disabled>
+	   					<!--<option value="{{data.asunto}}" selected>{{data.asunto}}</option>-->
+	   					<option value="Seleccione" selected>Seleccione</option>
+						<option value="Pago">Pago</option>
 	   					<option value="Pago de convenio">Pago de convenio</option>
 	   					<option value="Pago carta no adeudo">Pago carta no adeudo</option>
+	   				 	<option value="Pagos de facturas">Pagos de facturas</option>
 					</select>
-				</h3>
+				</h4>
 				
 			</div>
 			<div ng-if="data == null" >
@@ -21,26 +24,26 @@
 		</div>
 		<div class="col-xs-6">
 			<h1 ng-if="data!=null">
-				<button class="btn btn-primary btn-lg" id="btn-comenzar" ng-disabled="tomar" ng-click="tomar_turno(data.id, data.turno, data.subasunto)">Tomar
+				<button class="btn btn-primary btn-lg" id="btn-comenzar" ng-disabled="tomar" ng-click="tomar_turno(data.id, data.turno, data.subasunto, 'P', 'CAJA')">Tomar
 				</button>
 			</h1>
 			<h1>
-				<button class="btn btn-danger btn-lg"  ng-disabled="abandonado" ng-click="turno_abandonado(data.id, data.turno)">Abandonado</button>
+				<button class="btn btn-danger btn-lg"  ng-disabled="abandonado" ng-click="turno_abandonado(data.id, data.turno, data.subasunto, 'P', 'CAJA')">Abandonado</button>
 			</h1>
 			<h1>
-				<button class="btn btn-success btn-lg" ng-disabled="terminar" ng-click="terminar_turno(data.id, data.turno)">Terminar</button>
+				<button class="btn btn-success btn-lg" ng-disabled="terminar" ng-click="terminar_turno(data.id, data.turno, data.subasunto, 'P', 'CAJA')">Terminar</button>
 			</h1>
 			<h1>
 				<button  class="btn btn-primary btn-lg" ng-disabled="volver" ng-click="volver_atras()">Volver</button>
 			</h1>
 		</div>
 	</div>
-	<div class="row">
+	<!--<div class="row">
 		<div class="col-md-12">
 			<h4>Tiempo atendiendo:</h4>
 			<input type="text" name="tiempo" id="noc" value="00:00:00" class="form-control" readonly="true" disabled>
 		</div>
-	</div>	
+	</div>-->	
 </div>
 <div class="container">
 	<div class="row">
