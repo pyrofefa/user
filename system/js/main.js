@@ -176,7 +176,7 @@ rutas.controller('pagosController', function($scope, $http, $route, $location, s
                 method:"put",
                 //url: "http://localhost/turnomatic/public/tikets/actualizar/"+$id,
                 url: "http://localhost/turnomatic/public/api/tikets/actualizartiempo/"+$id,
-                data: ({ 'asunto' : asunto })
+                data: ({ 'subasunto' : asunto, 'asunto' : 'Pago' })
             }).success(function(data){
                 socket.emit('termino',{ turno: turno, caja: localStorage.caja, asunto: $subasunto, letra: $letra, tipo: $tipo });
                 $('#cargando').hide();
@@ -227,6 +227,94 @@ rutas.controller('pagosController', function($scope, $http, $route, $location, s
 });
 rutas.controller('aclaracionesController', function($scope, $http, $location, socket, $route)
 {
+
+    $scope.tipos = [ {value : 'Tramites', asunto :'Trámite' } ,{value : 'Aclaraciones y Otros', asunto : 'Aclaración'}];
+    $scope.tramites = [
+        {
+            value : 'Contrato',
+            asunto : 'Contrato'
+        },
+        {
+            value : 'Convenio', 
+            asunto : 'Convenio'
+        },
+        {
+            value : 'Cambio de nombre', 
+            asunto : 'Cambio de nombre'
+        },
+        {
+            value : 'Carta de adeudo',
+            asunto : 'Carta de no adeudo'
+        },
+        {
+            value : 'Factibilidad', 
+            asunto : 'Factibilidad de servicio'
+        },
+        {
+            value : 'Solicitud de tarifa social',
+            asunto : 'Solicitud de tarifa social'
+        },
+        {
+            value : '2 o mas tramites', 
+            asunto : '2 o mas tramites'
+        },
+        {
+            value : 'Propuestas de pago', 
+            asunto : 'Propuestas de pago'
+        },
+        {
+            value : 'Baja por impago', 
+            asunto : 'Baja por impago'
+        }
+    ];
+    
+    $scope.aclaraciones = [
+        {
+            value : 'Alto consumo (con y sin medidor)',
+            asunto : 'Alto consumo (con y sin medidor)'
+        },
+        {
+            value : 'Reconexión de servicio',
+            asunto : 'Reconexion de servicio' 
+        },
+        {
+            value : 'Error en lectura',
+            asunto : 'Error en lectura'
+        },
+        {
+            value : 'No toma lectura',
+            asunto : 'No toma lectura'
+        },
+        {
+            value : 'Cambio de tarifa',
+            asunto : 'Cambio de tarifa'
+        },
+        {
+            value : 'No entrega de recibo',
+            asunto : 'No entrega recibo'
+        },
+        {
+            value : 'Solicitud de medidor',
+            asunto : 'Solicitud de medidor'
+        },
+        {
+            value : 'Otros tramites',
+            asunto : 'Otros Tramites'
+        },
+        {
+            value : 'Alta estimacion de consumo',
+            asunto : 'Alta estimacion de consumo'
+        },
+        {
+            value : 'Propuestas de pago',
+            asunto : 'Propuestas de pago'
+        },
+        {
+            value : 'Aviso de incidencia',
+            asunto : 'Aviso de incidencia'
+        }
+    ];
+
     $scope.abandonado = true;
     $scope.terminar = true;
     $scope.mostrar = "Turno en espera";
@@ -243,7 +331,6 @@ rutas.controller('aclaracionesController', function($scope, $http, $location, so
         }).error(function(data){
             //alert("Ha ocurrido un error al mostrar los datos");
     });
-
     socket.on('turno',function(data)
     {
         //console.log(data);
@@ -267,11 +354,10 @@ rutas.controller('aclaracionesController', function($scope, $http, $location, so
         });
     });
     
-    $scope.tomar_turno = function($id, $turno, $subasunto, $letra, $tipo)
+    $scope.tomar_turno = function($id, $turno, $letra, $tipo)
     {
-        $('#asunto').removeAttr('disabled');
-        $('#asunto_aclaraciones').removeAttr('disabled');
-        $('#cargando').show();
+        $('#seleccionar').removeAttr('disabled');
+         $('#cargando').show();
         turno = $turno;
 
         $http({
@@ -280,7 +366,7 @@ rutas.controller('aclaracionesController', function($scope, $http, $location, so
             url: "http://localhost/turnomatic/public/api/tikets/actualizar/"+$id,
             data: ({'fk_caja' : localStorage.caja })
         }).success(function(data){
-            socket.emit('turno',{ turno: turno, caja: localStorage.caja, asunto: $subasunto, letra: $letra, tipo: $tipo });
+            socket.emit('turno',{ turno: turno, caja: localStorage.caja, letra: $letra, tipo: $tipo });
             //console.log(data);
             $scope.tomar = true;
             $scope.abandonado = false;
@@ -294,15 +380,21 @@ rutas.controller('aclaracionesController', function($scope, $http, $location, so
             //console.log(id);
         })
     }
-    $scope.terminar_turno = function($id, $turno, $subasunto, $letra, $tipo)
+    $scope.terminar_turno = function( $id, $turno, $letra, $tipo)
     {
         var asunto = $('#asunto').val();
-        console.log(asunto);
+        var subasunto = $('#subasunto').val();
+ 
         $('#cargando').show();
         
-        if (asunto == 'Seleccione') 
+        if (asunto == '') 
         {
             alert('Tiene que seleccionar un asunto');
+            $('#cargando').hide();
+        }
+        else if(subasunto == '')
+        {
+            alert('Tiene que seleccionar un subasunto');
             $('#cargando').hide();
         }
         else
@@ -311,9 +403,9 @@ rutas.controller('aclaracionesController', function($scope, $http, $location, so
                 method:"put",
                 //url: "http://localhost/turnomatic/public/tikets/actualizar/"+$id,
                 url: "http://localhost/turnomatic/public/api/tikets/actualizartiempo/"+$id,
-                data: ({ 'asunto' : asunto })
+                data: ({ 'asunto' : asunto, 'subasunto' : subasunto })
             }).success(function(data){
-                socket.emit('termino',{ turno: turno, caja: localStorage.caja, asunto: $subasunto, letra: $letra, tipo: $tipo });
+                socket.emit('termino',{ turno: turno, caja: localStorage.caja, asunto: asunto, subasunto: subasunto, letra: $letra, tipo: $tipo });
                 $('#cargando').hide();
                 $route.reload();
                 //$location.path('/seleccionar');
@@ -326,34 +418,26 @@ rutas.controller('aclaracionesController', function($scope, $http, $location, so
       
         
     }
-    $scope.turno_abandonado = function($id, $turno, $subasunto, $letra, $tipo)
+    $scope.turno_abandonado = function($id, $turno, $letra, $tipo)
     {
         var asunto = $('#asunto').val();
         console.log(asunto);
         //alert("Abandonado");
         $('#cargando').show();
 
-        /*if (asunto == 'Seleccione') 
-        {
-            alert('Tiene que seleccionar un asunto');
+        $http({
+            method:"put",
+            //url: "http://localhost/turnomatic/public/tikets/actualizar/"+$id,
+            url: "http://localhost/turnomatic/public/api/tikets/actualizartiempoabandonado/"+$id,
+            data: ({'asunto': asunto })
+        }).success(function(data){
+            socket.emit('abandono',{ turno: turno, caja: localStorage.caja, letra: $letra, tipo: $tipo });
             $('#cargando').hide();
-        }
-        else
-        {*/
-            $http({
-                method:"put",
-                //url: "http://localhost/turnomatic/public/tikets/actualizar/"+$id,
-                url: "http://localhost/turnomatic/public/api/tikets/actualizartiempoabandonado/"+$id,
-                data: ({'asunto': asunto })
-            }).success(function(data){
-                socket.emit('abandono',{ turno: turno, caja: localStorage.caja, asunto: $subasunto, letra: $letra, tipo: $tipo });
-                $('#cargando').hide();
-                $route.reload();
-            }).error(function(data){
-                alert('Ocurrio un error al actualizar los datos intente de nuevo');
-                $('#cargando').hide();
-            })
-        //}    
+            $route.reload();
+        }).error(function(data){
+            alert('Ocurrio un error al actualizar los datos intente de nuevo');
+            $('#cargando').hide();
+        })
         
     }
     $scope.volver_atras = function()

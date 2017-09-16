@@ -6,50 +6,48 @@
 			<div ng-if="data != null">
 				<h1 style="text-align: center;">{{ mostrar }}</h1>
 					<h1 style="text-align: center;">A{{ data.turno }}</h1>
-					<h1 style="text-align: center;">{{ data.subasunto }}</h1>
- 					<div ng-if="data.subasunto == 'Tramites'">
-						<h4 style="text-align: center;">
-							<select id="asunto" disabled>
-								<option value="{{data.asunto}}" selected>{{data.asunto}}</option>
-								<option value="Contrato">Contrato</option>
-								<option value="Convenio">Convenio</option>
-								<option value="Cambio de nombre">Cambio de nombre</option>
-								<option value="Carta de adeudo">Carta de no adeudo</option>
-								<option value="Factibilidad">Factibilidad de servicio</option>
-								<option value="2 o mas tramites">2 o mas tramites</option>
-							</select>
-						</h4>
+					<br>
+					<div class="row">
+						<div class="col-sm-1"></div>
+						<div class="col-sm-3"><br><h4>Asunto:</h4></div>
+						<div class="col-sm-3">
+	 						<h3 style="text-align: center;">
+	 							 <select id="seleccionar" ng-model="tipo" ng-options="tipo.asunto for tipo in  tipos" disabled ></select>
+	 						</h3>
+	 					</div>	
 					</div>
-					<div ng-if="data.subasunto == 'Aclaraciones y Otros'">
-						<h4 style="text-align: center;">
-							<select id="asunto" disabled>
-								<option value="{{data.asunto}}" selected>{{data.asunto}}</option>
-								<option value="Alto consumo (con y sin medidor)">Alto consumo (con y sin medidor)</option>
-								<option value="Reconexion de servicio">Reconexion de servicio</option>
-								<option value="Error en lectura">Error en lectura</option>
-								<option value="No toma lectura">No toma lectura</option>
-								<option value="No entrega de recibo">No entrega recibo</option>
-								<option value="Cambio de tarifa">Cambio de tarifa</option>
-								<option value="Solicitud de medidor">Solicitud de medidor</option>
-								<option value="Otros tramites">Otros Tramites</option>
-							</select>
-						</h4>
+ 					<div class="row">
+						<div class="col-sm-1"></div>
+						<div class="col-sm-3"><h5>SubAsunto:</h5></div>
+						<div class="col-sm-3">
+							<h4 ng-show="tipo.asunto === 'Trámite'" style="text-align: center;">
+					    		<select ng-model="tipoo" ng-options="tramite.asunto for tramite in tramites">
+					    		</select>
+							</h4>
+							<h5 ng-show="tipo.asunto === 'Aclaración'" style="text-align: center;">
+					    		<select ng-model="tipoo"  ng-options="aclaracion.asunto for aclaracion in aclaraciones">
+					    		</select>
+							</h5>
+	 						
+	 					</div>	
 					</div>
+					<input type="hidden" value="{{tipo.value}}" id="asunto">
+					<input type="hidden" value="{{tipoo.asunto}}" id="subasunto">
 				</div>
-			<div ng-if="data == null" >
-				<h1 style="text-align: center;">No hay numeros en espera</h1>
-			</div>
+				<div ng-if="data == null" >
+					<h1 style="text-align: center;">No hay numeros en espera</h1>
+				</div>
 		</div>
-		<div class="col-xs-6">
+ 		<div class="col-xs-6">
 			<h1 ng-if="data!=null">
-				<button class="btn btn-primary btn-lg" id="btn-comenzar" ng-disabled="tomar" ng-click="tomar_turno(data.id, data.turno, data.subasunto, 'A', 'VENTANILLA')">Tomar
+				<button class="btn btn-primary btn-lg" id="btn-comenzar" ng-disabled="tomar" ng-click="tomar_turno(data.id, data.turno, 'A', 'VENTANILLA')">Tomar
 				</button>
 			</h1>
 			<h1>
-				<button class="btn btn-danger btn-lg"  ng-disabled="abandonado" ng-click="turno_abandonado(data.id, data.turno, data.subasunto, 'A', 'VENTANILLA')">Abandonado</button>
+				<button class="btn btn-danger btn-lg"  ng-disabled="abandonado" ng-click="turno_abandonado(data.id, data.turno, 'A', 'VENTANILLA')">Abandonado</button>
 			</h1>
 			<h1>
-				<button class="btn btn-success btn-lg" ng-disabled="terminar" ng-click="terminar_turno(data.id, data.turno, data.subasunto, 'A', 'VENTANILLA')">Terminar</button>
+				<button class="btn btn-success btn-lg" ng-disabled="terminar" ng-click="terminar_turno(data.id, data.turno, 'A', 'VENTANILLA')">Terminar</button>
 			</h1>
 			<h1>
 				<button  class="btn btn-primary btn-lg" ng-disabled="volver" ng-click="volver_atras()">Volver</button>
