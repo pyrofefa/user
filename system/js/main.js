@@ -29,7 +29,7 @@ rutas.config(function($routeProvider) {
 
 //lamando a socket en angular
 rutas.factory('socket',['$rootScope', function($rootScope){
-    var socket = io.connect('http://localhost:8080');
+    var socket = io.connect('http://192.168.8.132:8080');
     return{
         on: function(eventName, callback){
             socket.on(eventName, callback);
@@ -63,8 +63,8 @@ rutas.controller('inicioController', function($scope, $http, $route, socket, $lo
         //console.log(sucursal);
         $http({
             method:"post",
-            url: "http://localhost/turnomatic/public/api/iniciar/"+sucursal,
-            //url: "http://localhost/turnomatic/public/user/iniciar/"+sucursal,
+            url: "http://localhost/api_agua/public/api/iniciar/"+sucursal,
+            //url: "http://localhost/api_agua/public/user/iniciar/"+sucursal,
             data: ({'name' : caja , 'password' :  contra })
         }).success(function(data){
             //console.log(data);
@@ -75,8 +75,8 @@ rutas.controller('inicioController', function($scope, $http, $route, socket, $lo
                 localStorage.caja = caja;
                 document.getElementById("caja").innerHTML = localStorage.caja;
                 localStorage.sucursal= sucursal;
-                console.log("Local storage caja: "+localStorage.caja);
-                console.log("Local storage sucursal: "+localStorage.sucursal);
+                //console.log("Local storage caja: "+localStorage.caja);
+                //console.log("Local storage sucursal: "+localStorage.sucursal);
             }
             else if(data==0)
             {
@@ -98,8 +98,8 @@ rutas.controller('pagosController', function($scope, $http, $route, $location, s
    
     $http({
         method:"get",
-        //url: "http://localhost/turnomatic/public/home/mostraraclaraciones/"+localStorage.sucursal
-        url: "http://localhost/turnomatic/public/api/mostrarpagos/"+localStorage.sucursal
+        //url: "http://localhost/api_agua/public/home/mostraraclaraciones/"+localStorage.sucursal
+        url: "http://localhost/api_agua/public/api/mostrarpagos/"+localStorage.sucursal
         }).success(function(data){
             $scope.datos=data;
             $('#cargando').hide();
@@ -112,18 +112,18 @@ rutas.controller('pagosController', function($scope, $http, $route, $location, s
     {
         //console.log(data);
         $scope.$apply(function(){
-            console.log('El Turno: '+data.turno+' esta siendo atendido por la caja: '+data.caja);
-            console.log('Mi caja es: '+localStorage.caja);
-            console.log('Y estoy atendiendo el turno: '+turno);
+            //console.log('El Turno: '+data.turno+' esta siendo atendido por la caja: '+data.caja);
+            //console.log('Mi caja es: '+localStorage.caja);
+            //console.log('Y estoy atendiendo el turno: '+turno);
             
             if (data.caja == localStorage.caja && data.turno == turno) 
             {
-                console.log('Tu estas atendiendo este turno');
+                //console.log('Tu estas atendiendo este turno');
             }
             else
             {
-                console.log('El turno: '+turno+' esta siendo atendido por la caja: '+data.caja);
-                console.log('Tu no estas atendiendo este turno');
+                //console.log('El turno: '+turno+' esta siendo atendido por la caja: '+data.caja);
+                //console.log('Tu no estas atendiendo este turno');
                 $scope.tomar = true;
                 $scope.mostrar = 'Atendiendo';
             }
@@ -134,14 +134,13 @@ rutas.controller('pagosController', function($scope, $http, $route, $location, s
     $scope.tomar_turno = function($id, $turno, $subasunto, $letra, $tipo)
     {
         $('#asunto').removeAttr('disabled');
-        $('#asunto_aclaraciones').removeAttr('disabled');
         $('#cargando').show();
         turno = $turno;
 
         $http({
             method:"put",
-            //url: "http://localhost/turnomatic/public/tikets/actualizar/"+$id,
-            url: "http://localhost/turnomatic/public/api/tikets/actualizar/"+$id,
+            //url: "http://localhost/api_agua/public/tikets/actualizar/"+$id,
+            url: "http://localhost/api_agua/public/api/tikets/actualizar/"+$id,
             data: ({'fk_caja' : localStorage.caja })
         }).success(function(data){
             socket.emit('turno',{ turno: turno, caja: localStorage.caja, asunto: $subasunto, letra: $letra, tipo: $tipo });
@@ -174,8 +173,8 @@ rutas.controller('pagosController', function($scope, $http, $route, $location, s
         {
             $http({
                 method:"put",
-                //url: "http://localhost/turnomatic/public/tikets/actualizar/"+$id,
-                url: "http://localhost/turnomatic/public/api/tikets/actualizartiempo/"+$id,
+                //url: "http://localhost/api_agua/public/tikets/actualizar/"+$id,
+                url: "http://localhost/api_agua/public/api/tikets/actualizartiempo/"+$id,
                 data: ({ 'subasunto' : asunto, 'asunto' : 'Pago' })
             }).success(function(data){
                 socket.emit('termino',{ turno: turno, caja: localStorage.caja, asunto: $subasunto, letra: $letra, tipo: $tipo });
@@ -205,8 +204,8 @@ rutas.controller('pagosController', function($scope, $http, $route, $location, s
         {*/    
             $http({
                 method:"put",
-                //url: "http://localhost/turnomatic/public/tikets/actualizar/"+$id,
-                url: "http://localhost/turnomatic/public/api/tikets/actualizartiempoabandonado/"+$id,
+                //url: "http://localhost/api_agua/public/tikets/actualizar/"+$id,
+                url: "http://localhost/api_agua/public/api/tikets/actualizartiempoabandonado/"+$id,
                 data: ({'asunto': asunto })
             }).success(function(data){
                 socket.emit('abandono',{ turno: turno, caja: localStorage.caja, asunto: $subasunto, letra: $letra, tipo: $tipo });
@@ -322,8 +321,8 @@ rutas.controller('aclaracionesController', function($scope, $http, $location, so
 
     $http({
         method:"get",
-        //url: "http://localhost/turnomatic/public/home/mostraraclaraciones/"+localStorage.sucursal
-        url: "http://localhost/turnomatic/public/api/mostraraclaraciones/"+localStorage.sucursal
+        //url: "http://localhost/api_agua/public/home/mostraraclaraciones/"+localStorage.sucursal
+        url: "http://localhost/api_agua/public/api/mostraraclaraciones/"+localStorage.sucursal
         }).success(function(data){
             $scope.datos=data;
             $('#cargando').hide();
@@ -335,18 +334,18 @@ rutas.controller('aclaracionesController', function($scope, $http, $location, so
     {
         //console.log(data);
         $scope.$apply(function(){
-            console.log('El Turno: '+data.turno+' esta siendo atendido por la caja: '+data.caja);
-            console.log('Mi caja es: '+localStorage.caja);
-            console.log('Y estoy atendiendo el turno: '+turno);
+            //console.log('El Turno: '+data.turno+' esta siendo atendido por la caja: '+data.caja);
+            //console.log('Mi caja es: '+localStorage.caja);
+            //console.log('Y estoy atendiendo el turno: '+turno);
             
             if (data.caja == localStorage.caja && data.turno == turno) 
             {
-                console.log('Tu estas atendiendo este turno');
+                //console.log('Tu estas atendiendo este turno');
             }
             else
             {
-                console.log('El turno: '+turno+' esta siendo atendido por la caja: '+data.caja);
-                console.log('Tu no estas atendiendo este turno');
+                //console.log('El turno: '+turno+' esta siendo atendido por la caja: '+data.caja);
+                //console.log('Tu no estas atendiendo este turno');
                 $scope.tomar = true;
                 $scope.mostrar = 'Atendiendo';
             }
@@ -357,13 +356,13 @@ rutas.controller('aclaracionesController', function($scope, $http, $location, so
     $scope.tomar_turno = function($id, $turno, $letra, $tipo)
     {
         $('#seleccionar').removeAttr('disabled');
-         $('#cargando').show();
+        $('#cargando').show();
         turno = $turno;
 
         $http({
             method:"put",
-            //url: "http://localhost/turnomatic/public/tikets/actualizar/"+$id,
-            url: "http://localhost/turnomatic/public/api/tikets/actualizar/"+$id,
+            //url: "http://localhost/api_agua/public/tikets/actualizar/"+$id,
+            url: "http://localhost/api_agua/public/api/tikets/actualizar/"+$id,
             data: ({'fk_caja' : localStorage.caja })
         }).success(function(data){
             socket.emit('turno',{ turno: turno, caja: localStorage.caja, letra: $letra, tipo: $tipo });
@@ -376,6 +375,8 @@ rutas.controller('aclaracionesController', function($scope, $http, $location, so
             $('#cargando').hide();
         }).error(function(data){
             alert('Ocurrio un error al tomar el turno intente de nuevo');
+            $('#seleccionar').attr('disabled',true);
+
             $('#cargando').hide();
             //console.log(id);
         })
@@ -401,8 +402,8 @@ rutas.controller('aclaracionesController', function($scope, $http, $location, so
         {
             $http({
                 method:"put",
-                //url: "http://localhost/turnomatic/public/tikets/actualizar/"+$id,
-                url: "http://localhost/turnomatic/public/api/tikets/actualizartiempo/"+$id,
+                //url: "http://localhost/api_agua/public/tikets/actualizar/"+$id,
+                url: "http://localhost/api_agua/public/api/tikets/actualizartiempo/"+$id,
                 data: ({ 'asunto' : asunto, 'subasunto' : subasunto })
             }).success(function(data){
                 socket.emit('termino',{ turno: turno, caja: localStorage.caja, asunto: asunto, subasunto: subasunto, letra: $letra, tipo: $tipo });
@@ -427,8 +428,8 @@ rutas.controller('aclaracionesController', function($scope, $http, $location, so
 
         $http({
             method:"put",
-            //url: "http://localhost/turnomatic/public/tikets/actualizar/"+$id,
-            url: "http://localhost/turnomatic/public/api/tikets/actualizartiempoabandonado/"+$id,
+            //url: "http://localhost/api_agua/public/tikets/actualizar/"+$id,
+            url: "http://localhost/api_agua/public/api/tikets/actualizartiempoabandonado/"+$id,
             data: ({'asunto': asunto })
         }).success(function(data){
             socket.emit('abandono',{ turno: turno, caja: localStorage.caja, letra: $letra, tipo: $tipo });
