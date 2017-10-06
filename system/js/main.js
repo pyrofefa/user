@@ -29,7 +29,7 @@ rutas.config(function($routeProvider) {
 
 //lamando a socket en angular
 rutas.factory('socket',['$rootScope', function($rootScope){
-    var socket = io.connect('http://192.168.8.132:8080');
+    var socket = io.connect('http://localhost:8080');
     return{
         on: function(eventName, callback){
             socket.on(eventName, callback);
